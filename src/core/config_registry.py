@@ -304,7 +304,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
     },
     "LITELLM_MODEL": {
         "title": "Primary Model",
-        "description": "Primary model in provider/model format (e.g. gemini/gemini-3.1-pro-preview, deepseek/deepseek-v4-flash, anthropic/claude-sonnet-4-6). If empty, it is auto-inferred from available API keys or channel declarations.",
+        "description": "Primary model in provider/model format (e.g. gemini/gemini-3.6-flash, deepseek/deepseek-v4-flash, anthropic/claude-sonnet-4-6). If empty, it is auto-inferred from available API keys or channel declarations.",
         "category": "ai_model",
         "data_type": "string",
         "ui_control": "text",
@@ -318,7 +318,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
         "help_key": "settings.ai_model.LITELLM_MODEL",
         "examples": [
             "LITELLM_MODEL=deepseek/deepseek-v4-flash",
-            "LITELLM_MODEL=gemini/gemini-3.1-pro-preview",
+            "LITELLM_MODEL=gemini/gemini-3.6-flash",
             "LITELLM_MODEL=ollama/qwen3:8b",
         ],
         "docs": [
@@ -361,7 +361,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
         "help_key": "settings.ai_model.AGENT_LITELLM_MODEL",
         "examples": [
             "AGENT_LITELLM_MODEL=deepseek/deepseek-v4-pro",
-            "AGENT_LITELLM_MODEL=gemini/gemini-3.1-pro-preview",
+            "AGENT_LITELLM_MODEL=gemini/gemini-3.6-flash",
         ],
         "docs": [
             {
@@ -377,7 +377,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
     },
     "LITELLM_FALLBACK_MODELS": {
         "title": "Fallback Models",
-        "description": "Comma-separated fallback models tried when the primary model fails (e.g. anthropic/claude-sonnet-4-6,openai/gpt-5.4-mini). Useful for cross-provider redundancy.",
+        "description": "Comma-separated fallback models tried when the primary model fails (e.g. anthropic/claude-sonnet-4-6,openai/gpt-6.1-terra). Useful for cross-provider redundancy.",
         "category": "ai_model",
         "data_type": "string",
         "ui_control": "text",
@@ -390,8 +390,8 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
         "display_order": 2,
         "help_key": "settings.ai_model.LITELLM_FALLBACK_MODELS",
         "examples": [
-            "LITELLM_FALLBACK_MODELS=deepseek/deepseek-v4-pro,gemini/gemini-3-flash-preview",
-            "LITELLM_FALLBACK_MODELS=openai/gpt-5.4-mini",
+            "LITELLM_FALLBACK_MODELS=deepseek/deepseek-v4-pro,gemini/gemini-3.5-flash-lite",
+            "LITELLM_FALLBACK_MODELS=openai/gpt-6.1-terra",
         ],
         "docs": [
             {
@@ -732,7 +732,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
     # ------------------------------------------------------------------
     "DEEPSEEK_API_KEY": {
         "title": "DeepSeek API Key",
-        "description": "Official DeepSeek API key (from https://platform.deepseek.com). For compatibility, a key set alone still auto-infers deepseek/deepseek-chat and logs a deprecation warning; new configs should migrate to deepseek/deepseek-v4-flash. Also works in multi-channel mode.",
+        "description": "Official DeepSeek API key (from https://platform.deepseek.com). A key set alone auto-infers deepseek/deepseek-v4-flash unless a higher-priority model configuration is present. Also works in multi-channel mode.",
         "category": "ai_model",
         "data_type": "string",
         "ui_control": "password",
@@ -802,6 +802,34 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
             },
         ],
         "warning_codes": ["secret_value"],
+    },
+    "TICKPLUS_API_KEY": {
+        "title": "TickPlus API Key (Recommended)",
+        "description": "Preferred TickPlus API key for A-share/ETF daily K-lines, realtime indicators and name lookup. Failures fall back to existing providers.",
+        "category": "data_source",
+        "data_type": "string",
+        "ui_control": "password",
+        "is_sensitive": True,
+        "is_required": False,
+        "is_editable": True,
+        "default_value": None,
+        "options": [],
+        "validation": {},
+        "display_order": 15,
+    },
+    "TICKPLUS_PRIORITY": {
+        "title": "TickPlus Daily K-line Priority",
+        "description": "Priority for TickPlus A-share/ETF daily K-lines. Registered index routes are unchanged; realtime order uses REALTIME_SOURCE_PRIORITY.",
+        "category": "data_source",
+        "data_type": "integer",
+        "ui_control": "number",
+        "is_sensitive": False,
+        "is_required": False,
+        "is_editable": True,
+        "default_value": "0",
+        "options": [],
+        "validation": {"min": 0, "max": 99},
+        "display_order": 16,
     },
     "TICKFLOW_API_KEY": {
         "title": "TickFlow API Key",
@@ -1412,7 +1440,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
         "help_key": "settings.ai_model.provider_keys",
         "examples": [
             "GEMINI_API_KEY=your_gemini_api_key",
-            "LITELLM_MODEL=gemini/gemini-3.1-pro-preview",
+            "LITELLM_MODEL=gemini/gemini-3.6-flash",
         ],
         "docs": [
             {
@@ -1449,7 +1477,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
         "is_sensitive": False,
         "is_required": False,
         "is_editable": True,
-        "default_value": "gemini-3.1-pro-preview",
+        "default_value": "gemini-3.6-flash",
         "options": [],
         "validation": {},
         "display_order": 20,
@@ -1463,7 +1491,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
         "is_sensitive": False,
         "is_required": False,
         "is_editable": True,
-        "default_value": "gemini-3-flash-preview",
+        "default_value": "gemini-3.5-flash-lite",
         "options": [],
         "validation": {},
         "display_order": 21,
@@ -1499,7 +1527,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
         "examples": [
             "OPENAI_API_KEY=sk-xxxx",
             "OPENAI_BASE_URL=https://api.example.com/v1",
-            "LITELLM_MODEL=openai/gpt-5.5",
+            "LITELLM_MODEL=openai/gpt-6.1-sol",
         ],
         "docs": [
             {
@@ -1566,7 +1594,7 @@ _FIELD_DEFINITIONS: Dict[str, Dict[str, Any]] = {
         "is_sensitive": False,
         "is_required": False,
         "is_editable": True,
-        "default_value": "gpt-5.5",
+        "default_value": "gpt-6.1-sol",
         "options": [],
         "validation": {},
         "display_order": 60,
@@ -4667,7 +4695,7 @@ _FIELD_HELP_METADATA: Dict[str, Dict[str, Any]] = {
         "help_key": "settings.ai_model.provider_keys",
         "examples": [
             "GEMINI_API_KEYS=your_gemini_key_1,your_gemini_key_2",
-            "LITELLM_MODEL=gemini/gemini-3.1-pro-preview",
+            "LITELLM_MODEL=gemini/gemini-3.6-flash",
         ],
         "docs": _DOC_LLM_CONFIG,
         "warning_codes": ["secret_value", "comma_separated_keys"],
@@ -4675,8 +4703,8 @@ _FIELD_HELP_METADATA: Dict[str, Dict[str, Any]] = {
     "GEMINI_MODEL": {
         "help_key": "settings.ai_model.legacy_provider_params",
         "examples": [
-            "GEMINI_MODEL=gemini-3.1-pro-preview",
-            "LITELLM_MODEL=gemini/gemini-3.1-pro-preview",
+            "GEMINI_MODEL=gemini-3.6-flash",
+            "LITELLM_MODEL=gemini/gemini-3.6-flash",
         ],
         "docs": _DOC_LLM_CONFIG,
         "warning_codes": ["legacy_provider_setting"],
@@ -4684,8 +4712,8 @@ _FIELD_HELP_METADATA: Dict[str, Dict[str, Any]] = {
     "GEMINI_MODEL_FALLBACK": {
         "help_key": "settings.ai_model.legacy_provider_params",
         "examples": [
-            "GEMINI_MODEL_FALLBACK=gemini-3-flash-preview",
-            "LITELLM_FALLBACK_MODELS=gemini/gemini-3-flash-preview",
+            "GEMINI_MODEL_FALLBACK=gemini-3.5-flash-lite",
+            "LITELLM_FALLBACK_MODELS=gemini/gemini-3.5-flash-lite",
         ],
         "docs": _DOC_LLM_CONFIG,
         "warning_codes": ["legacy_provider_setting"],
@@ -4711,8 +4739,8 @@ _FIELD_HELP_METADATA: Dict[str, Dict[str, Any]] = {
     "OPENAI_MODEL": {
         "help_key": "settings.ai_model.legacy_provider_params",
         "examples": [
-            "OPENAI_MODEL=gpt-5.5",
-            "LITELLM_MODEL=openai/gpt-5.5",
+            "OPENAI_MODEL=gpt-6.1-sol",
+            "LITELLM_MODEL=openai/gpt-6.1-sol",
         ],
         "docs": _DOC_LLM_CONFIG,
         "warning_codes": ["legacy_provider_setting"],
@@ -4720,8 +4748,8 @@ _FIELD_HELP_METADATA: Dict[str, Dict[str, Any]] = {
     "OPENAI_VISION_MODEL": {
         "help_key": "settings.ai_model.legacy_provider_params",
         "examples": [
-            "OPENAI_VISION_MODEL=gpt-5.5",
-            "VISION_MODEL=openai/gpt-5.5",
+            "OPENAI_VISION_MODEL=gpt-6.1-sol",
+            "VISION_MODEL=openai/gpt-6.1-sol",
         ],
         "docs": _DOC_LLM_CONFIG,
         "warning_codes": ["legacy_provider_setting"],
@@ -4769,6 +4797,19 @@ _FIELD_HELP_METADATA: Dict[str, Dict[str, Any]] = {
         ],
         "docs": _DOC_LLM_CONFIG,
         "warning_codes": ["legacy_provider_setting"],
+    },
+    "TICKPLUS_API_KEY": {
+        "help_key": "settings.data_source.TICKPLUS_API_KEY",
+        "examples": [
+            "TICKPLUS_API_KEY=your_tickplus_key",
+        ],
+        "docs": [{"label": "TickPlus (Recommended) — Register", "href": "http://www.tickplus.org/register?reg=5433cf922395"}, *_DOC_FULL_GUIDE_DATA_SOURCE],
+        "warning_codes": ["secret_value"],
+    },
+    "TICKPLUS_PRIORITY": {
+        "help_key": "settings.data_source.TICKPLUS_PRIORITY",
+        "examples": ["TICKPLUS_PRIORITY=0"],
+        "docs": _DOC_FULL_GUIDE_DATA_SOURCE,
     },
     "TICKFLOW_API_KEY": {
         "help_key": "settings.data_source.TICKFLOW_API_KEY",
@@ -5193,6 +5234,7 @@ def _infer_category(key: str) -> str:
     if key.endswith("_PRIORITY") or key.startswith(
         (
             "TUSHARE",
+            "TICKPLUS",
             "TICKFLOW",
             "AKSHARE",
             "EFINANCE",
